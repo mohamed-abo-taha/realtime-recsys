@@ -6,9 +6,9 @@ __pycache__/
 build/
 dist/
 
-# data & artifacts are reproducible, not versioned
-data/
-artifacts*/
+# data & artifacts are reproducible, not versioned (root only — src/recsys/data is code)
+/data/
+/artifacts*/
 
 .venv/
 venv/
