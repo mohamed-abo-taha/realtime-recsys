@@ -50,6 +50,13 @@ def test_recommend_validates_input(client):
     assert client.get("/recommend", params={"user_id": 1, "k": 10_000}).status_code == 422
 
 
+def test_demo_page(client):
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert "text/html" in resp.headers["content-type"]
+    assert "Real-Time Recommender" in resp.text
+
+
 def test_metrics_endpoint(client):
     client.get("/recommend", params={"user_id": 1, "k": 5})
     resp = client.get("/metrics")

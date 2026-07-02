@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-Time Recommender — live demo</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.4rem; } .sub { opacity: .75; margin-top: -.5rem; }
+  .row { display: flex; gap: .5rem; margin: 1rem 0; flex-wrap: wrap; align-items: center; }
+  input, button { font-size: 1rem; padding: .5rem .8rem; border-radius: 8px; border: 1px solid #8884; }
+  button { cursor: pointer; background: #2563eb; color: #fff; border: 0; }
+  button.ghost { background: transparent; color: inherit; border: 1px solid #8886; }
+  .timings { display: flex; gap: .4rem; flex-wrap: wrap; margin: .8rem 0; }
+  .chip { font-size: .8rem; padding: .2rem .6rem; border-radius: 999px; border: 1px solid #8885; }
+  .chip b { font-variant-numeric: tabular-nums; }
+  ol { padding-left: 1.4rem; } li { margin: .3rem 0; }
+  .score { opacity: .6; font-size: .85rem; font-variant-numeric: tabular-nums; }
+  .cold { color: #d97706; font-size: .9rem; }
+  .err { color: #dc2626; }
+  footer { margin-top: 2rem; font-size: .85rem; opacity: .7; }
+</style>
+</head>
+<body>
+<h1>Real-Time Recommender</h1>
+<p class="sub">Two-stage retrieval + ranking · feature store · per-request stage timings. Trained on MovieLens&nbsp;25M.</p>
+
+<div class="row">
+  <label for="uid">user_id</label>
+  <input id="uid" type="number" min="0" value="77" style="width:8rem">
+  <button onclick="go()">Recommend</button>
+  <button class="ghost" onclick="random_user()">Random user</button>
+  <button class="ghost" onclick="unknown_user()">Unknown user (cold-start)</button>
+</div>
+
+<div id="timings" class="timings"></div>
+<div id="note"></div>
+<ol id="items"></ol>
+
+<footer>
+  GET <code>/recommend?user_id=…&k=…</code> · <a href="/docs">API docs</a> · <a href="/metrics">metrics</a>
+  · <a href="https://github.com/mohamed-abo-taha/realtime-recsys">source</a>
+</footer>
+
+<script>
+async function go() {
+  const uid = document.getElementById('uid').value;
+  const t = document.getElementById('timings'), n = document.getElementById('note'),
+        list = document.getElementById('items');
+  t.innerHTML = ''; n.innerHTML = ''; list.innerHTML = '';
+  try {
+    const r = await fetch(`recommend?user_id=${uid}&k=10`);
+    if (!r.ok) { n.innerHTML = `<span class="err">HTTP ${r.status}</span>`; return; }
+    const d = await r.json();
+    const stages = ['feature_fetch', 'encode', 'ann', 'rank', 'total'];
+    t.innerHTML = stages.map(s => `<span class="chip">${s.replace('_',' ')} <b>${d.timings_ms[s]}ms</b></span>`).join('');
+    if (d.cold_start) n.innerHTML = '<p class="cold">Unknown user → popularity fallback (cold-start path)</p>';
+    list.innerHTML = d.items.map(i =>
+      `<li>${i.title ?? 'item ' + i.item_id} <span class="score">${i.score.toFixed(3)}</span></li>`).join('');
+  } catch (e) { n.innerHTML = `<span class="err">${e}</span>`; }
+}
+function random_user() { document.getElementById('uid').value = 1 + Math.floor(Math.random() * 162000); go(); }
+function unknown_user() { document.getElementById('uid').value = 999999999; go(); }
+go();
+</script>
+</body>
+</html>

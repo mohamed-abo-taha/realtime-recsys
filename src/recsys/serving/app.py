@@ -17,8 +17,10 @@ from __future__ import annotations
 import logging
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi.responses import HTMLResponse
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, Summary, generate_latest
 
 from recsys import __version__
@@ -74,6 +76,11 @@ async def log_latency(request: Request, call_next):
         REQUEST_LATENCY.observe(elapsed)
     response.headers["X-Response-Time-Ms"] = f"{elapsed * 1000:.2f}"
     return response
+
+
+@app.get("/", include_in_schema=False)
+def demo_page() -> HTMLResponse:
+    return HTMLResponse((Path(__file__).parent / "static" / "index.html").read_text("utf-8"))
 
 
 @app.get("/health", response_model=HealthResponse)
