@@ -29,9 +29,10 @@ RAW_COLUMNS = {"user_id", "item_id", "rating", "timestamp"}
 
 def prepare(
     ratings: pd.DataFrame,
-    cfg: PrepareConfig = PrepareConfig(),
+    cfg: PrepareConfig | None = None,
     items: pd.DataFrame | None = None,
 ) -> dict[str, pd.DataFrame]:
+    cfg = cfg if cfg is not None else PrepareConfig()
     missing = RAW_COLUMNS - set(ratings.columns)
     if missing:
         raise ValueError(f"ratings frame missing columns: {sorted(missing)}")
@@ -107,7 +108,9 @@ def main() -> None:
     parser.add_argument("--raw", type=Path, default=data_dir() / "raw" / "ratings.parquet")
     parser.add_argument("--items", type=Path, default=data_dir() / "raw" / "items.parquet")
     parser.add_argument("--out", type=Path, default=data_dir() / "processed")
-    parser.add_argument("--positive-threshold", type=float, default=PrepareConfig.positive_threshold)
+    parser.add_argument(
+        "--positive-threshold", type=float, default=PrepareConfig.positive_threshold
+    )
     parser.add_argument("--min-user", type=int, default=PrepareConfig.min_user_interactions)
     parser.add_argument("--min-item", type=int, default=PrepareConfig.min_item_interactions)
     args = parser.parse_args()
