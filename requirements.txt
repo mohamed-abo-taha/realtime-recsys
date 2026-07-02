@@ -1,0 +1,12 @@
+# Serving + training deps (see pyproject.toml for the canonical list).
+# faiss-cpu is optional — the index falls back to exact numpy search without it.
+torch>=2.2
+numpy>=1.26
+pandas>=2.1
+pyarrow>=14
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.6
+lightgbm>=4.3
+prometheus-client>=0.20
+redis>=5.0

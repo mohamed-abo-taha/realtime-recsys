@@ -1,0 +1,90 @@
+[
+  {
+    "label": "no-cache",
+    "k": 10,
+    "levels": [
+      {
+        "concurrency": 1,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 488.5,
+        "p50_ms": 1.93,
+        "p95_ms": 2.92,
+        "p99_ms": 3.29,
+        "mean_ms": 2.05
+      },
+      {
+        "concurrency": 8,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 1150.8,
+        "p50_ms": 6.7,
+        "p95_ms": 8.72,
+        "p99_ms": 10.76,
+        "mean_ms": 6.94
+      },
+      {
+        "concurrency": 32,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 583.8,
+        "p50_ms": 33.31,
+        "p95_ms": 167.34,
+        "p99_ms": 268.48,
+        "mean_ms": 54.5
+      }
+    ]
+  },
+  {
+    "label": "cached",
+    "k": 10,
+    "levels": [
+      {
+        "concurrency": 1,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 486.0,
+        "p50_ms": 1.95,
+        "p95_ms": 2.93,
+        "p99_ms": 3.38,
+        "mean_ms": 2.06
+      },
+      {
+        "concurrency": 8,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 1506.4,
+        "p50_ms": 5.02,
+        "p95_ms": 6.96,
+        "p99_ms": 10.1,
+        "mean_ms": 5.3
+      },
+      {
+        "concurrency": 32,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 584.1,
+        "p50_ms": 32.51,
+        "p95_ms": 171.07,
+        "p99_ms": 278.76,
+        "mean_ms": 54.5
+      }
+    ]
+  },
+  {
+    "label": "docker-redis",
+    "k": 10,
+    "levels": [
+      {
+        "concurrency": 8,
+        "requests": 2000,
+        "errors": 0,
+        "rps": 365.8,
+        "p50_ms": 21.77,
+        "p95_ms": 29.24,
+        "p99_ms": 34.43,
+        "mean_ms": 21.82
+      }
+    ]
+  }
+]

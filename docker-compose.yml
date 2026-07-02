@@ -1,0 +1,33 @@
+# Core: api + redis (online feature store).
+# Monitoring stack is opt-in: docker compose --profile monitoring up
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8000"  # host 8000 is often taken by other local ML services
+    environment:
+      - ARTIFACTS_DIR=/app/artifacts
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles: [monitoring]
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    profiles: [monitoring]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
