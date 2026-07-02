@@ -1,5 +1,7 @@
 # Real-Time Recommendation Serving System
 
+[![CI](https://github.com/mohamed-abo-taha/realtime-recsys/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed-abo-taha/realtime-recsys/actions/workflows/ci.yml)
+
 A two-stage retrieval-and-ranking recommender served behind a REST API under a **sub-100ms p99 latency budget** — measured **p99 = 10.1ms at 8 concurrent users (~1,500 req/s)** on MovieLens 25M, with training and serving reading the same feature definitions.
 
 ```
