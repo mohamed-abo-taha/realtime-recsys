@@ -17,7 +17,7 @@ jobs:
       - name: Install (CPU torch)
         run: |
           pip install --index-url https://download.pytorch.org/whl/cpu torch
-          pip install -r requirements.txt pytest httpx "ruff==0.15.*"
+          pip install -r requirements.txt pytest httpx scikit-learn "ruff==0.15.*"
       - name: Lint
         run: ruff check src tests
       - name: Test
